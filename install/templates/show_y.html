@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>ce测试用</title>
+  <style type="text/css">
+		.btn { border: 1px solid #FF0000; display: inline; padding: 5px; cursor: pointer; }
+		#myform { display: none; }
+	</style>
+  <script type="text/javascript" src="http://www.china.com.cn/lib/jquery-1.11.0.min.js"></script>
+</head>
+
+<body>
+  <?php
+  	print_r($forminfos_data);
+  ?>
+  <ul>
+  	{loop $forminfos_data $field $info}
+  	<li>{$info['name']} - {$info['prize']}</li>
+  	{/loop}
+  </ul>
+  <div class="btn">点击抽奖</div>
+  <form method="post" action="?m=activity&c=index&a=add&formid={$formid}" name="myform" id="myform">
+  	<ul>
+  		<li>姓　名：<input name="info[name]" id="name" type="text" value=""></li>
+  		<li>手机号：<input name="info[phone]" id="phone" type="text" value=""></li>
+  	</ul>
+  	<input type="hidden" name="info[activity_id]" id="activity_id" value="{$formid}" />
+  	<input type="hidden" name="info[award_id]" id="award_id" value="" />
+  	<input type="hidden" name="info[create_time]" id="create_time" value="" />
+  	<input type="submit" name="dosubmit" id="dosubmit" value=" 提交 ">&nbsp;<input type="reset" value=" 取消 ">
+	</form>
+	<script type="text/javascript">
+		(function($) {
+			function getData() {
+				$.getJSON("?m=activity&c=index&a=data&formid={$formid}",function(res){
+					$('#award_id').val(res.award_id);
+					$('#create_time').val(res.times);
+					$('#myform').show();
+					console.log(res);
+				});
+			}
+			$('.btn').on('click',function() {
+				$(this).off();
+				getData();
+			});
+		})(jQuery);
+	</script>
+</body>
+</html>
